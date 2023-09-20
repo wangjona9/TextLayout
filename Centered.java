@@ -1,10 +1,28 @@
 public class Centered implements TextBlock {
+    // +--------+------------------------------------------------------------
+    // | Fields |
+    // +--------+
+  
+    /**
+     * The original text block.
+     */
     private TextBlock contents;
-    private int newWidth;
-
+  
+    /**
+     * The maximum width for truncation.
+     */
+    private int maxWidth;
+  
+    // +--------------+------------------------------------------------------
+    // | Constructors |
+    // +--------------+
+  
+    /**
+     * Build a new centered block.
+     */
     public Centered(TextBlock contents, int width) {
         this.contents = contents;
-        this.newWidth = width;
+        this.maxWidth = width;
     }
 
     // +---------+-----------------------------------------------------------
@@ -20,31 +38,18 @@ public class Centered implements TextBlock {
     public String row(int i) throws Exception {
         String unjRow = contents.row(i);
         
-        
-            StringBuilder builder = new StringBuilder();
-            builder.append('0'); // Non-breaking space
-            builder.append('0'); // Non-breaking space
-    
-            for (i = 0; i < unjRow.length(); i++) {
-                builder.append(unjRow.charAt(i));
-            }
-    
-            builder.append('0'); // Non-breaking space
-            builder.append('g'); // Non-breaking space
-    
-            return builder.toString();
+        int padding = (maxWidth - unjRow.length()) / 2;
+        String centered = String.format("%" + (padding + unjRow.length()) + "s", unjRow);
+
+        return centered;
         }
-    
-    
-        
 
         public int height() {
-            return 4 + this.contents.height();
+            return contents.height();
             
         }
     
         public int width() {
-            return 4 + this.contents.width();
+            return maxWidth;
         }
     }
-
