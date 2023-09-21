@@ -44,8 +44,10 @@ public class RightJustified implements TextBlock {
         throw new Exception("Invalid row " + i);
     }
 
-    int padding = Math.max(0, maxWidth - originalRow.length());
-    return TBUtils.spaces(padding) + originalRow;
+    int padding = (maxWidth - originalRow.length());
+
+    String rightJustified = String.format("%" + (padding + originalRow.length()) + "s", originalRow);
+    return rightJustified;
 }
 
   /**
@@ -59,6 +61,6 @@ public class RightJustified implements TextBlock {
    * Determine how many columns are in the block.
    */
   public int width() {
-    return Math.min(contents.width(), maxWidth);
+    return maxWidth;
   } // width()
 }
