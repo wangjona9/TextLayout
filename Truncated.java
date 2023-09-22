@@ -1,37 +1,45 @@
+/**
+ * An implementation to truncate an input block
+ * within a specified width.
+ * @author Jonathan Wang
+ * September 2023
+ */
 public class Truncated implements TextBlock {
     private TextBlock contents;
     private int maxWidth;
 
-    public Truncated(TextBlock originalBlock, int maxWidth) {
-        this.contents = originalBlock;
+    public Truncated(TextBlock contents, int maxWidth) {
+        this.contents = contents;
         this.maxWidth = maxWidth;
     }
 
+    // Methods (required by TextBlock interface)
     public String row(int i) throws Exception {
-        String originalRow;
-        try {
-            originalRow = this.contents.row(i);
-        } catch (Exception e) {
-            throw new Exception("Invalid row " + i);
-        }
+        String originalRow = contents.row(i);
 
-        if (originalRow.length() <= maxWidth) {
-            int padding = (maxWidth - originalRow.length()) / 2;
-            String paddedContent = TBUtils.spaces(padding) + originalRow + TBUtils.spaces(padding);
-            return paddedContent;
-        } else if (originalRow.length() > maxWidth ) {
-            return originalRow.substring(0, maxWidth);
-        }
+        int padding = (maxWidth - originalRow.length()); // Set space between the TextLine and the rest of the width
+        String leftJustified = String.format("%" + (originalRow.length()) + "s", originalRow); // Format right side of the Textline
+        leftJustified = String.format("%-" + (padding + leftJustified.length()) + "s", leftJustified); // Format left side of the Textline
 
-        return originalRow;  
+        // Truncate text if the TextLine length is less than the overall width
+        if (originalRow.length() > maxWidth) {
+            return originalRow.substring(0, maxWidth); // Truncate string
+        } else {
+            return leftJustified; // Return whitespace to the right of the textline
+        }
     }
 
+    /**
+     * Determine how many rows are in the block.
+     */
     public int height() {
         return contents.height();
-    }
+    } // height()
 
+    /**
+     * Determine how many columns are in the block.
+     */
     public int width() {
-        return Math.min(contents.width(), maxWidth);
-    }
+        return maxWidth;
+    } // width()
 }
-
