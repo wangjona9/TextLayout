@@ -1,76 +1,103 @@
+import java.io.PrintStream;
 import java.io.PrintWriter;
 
 /**
- * A series of experiments with the text block layout classes.
+ * Utilities for TextBlocks.
  * 
  * @author Samuel A. Rebelsky
- * @version 1.3 of September 2019
+ * @version 1.3 of September 2014
  */
-public class TBExpt {
-  // +------+--------------------------------------------------------------
-  // | Main |
-  // +------+
+public class TBUtils {
+  // +--------------+------------------------------------------------------
+  // | Class Fields |
+  // +--------------+
 
-  public static void main(String[] args) throws Exception {
-    // Prepare for input and output
-    PrintWriter pen = new PrintWriter(System.out, true);
+  /**
+   * A really big sequence of dashes. This sequence may grow as the program operates.
+   */
+  static String lotsOfDashes = "--";
 
-    // Create a block to use
-    TextBlock block = new TextLine("Hello");
-    TextBlock block2 = new TextLine("GoodBye");
-    TextBlock contentBlock = new TextLine("HelloHello");
-    TextBlock centerBlock = new TextLine("Centered");
+  /**
+   * A really big sequence of spaces. This sequence may grow as the program operates.
+   */
+  static String lotsOfSpaces = "  ";
 
-    BoxedBlock box = new BoxedBlock(block);
-    BoxedBlock box2 = new BoxedBlock(box);
-    BoxedBlock box3 = new BoxedBlock(block2);
-    BoxedBlock truncatedBox = new BoxedBlock(contentBlock);
-    BoxedBlock centeredBox = new BoxedBlock(centerBlock);
-    BoxedBlock justifiedBox = new BoxedBlock(contentBlock);
-    BoxedBlock HFlipBox = new BoxedBlock(contentBlock);
+  // +----------------+----------------------------------------------------
+  // | Static Methods |
+  // +----------------+
+
+  /**
+   * Build a sequence of dashes of a specified length.
+   */
+  static String dashes(int len) {
+    // Note: This strategy probably represents an overkill in
+    // attempts at efficiency.
+    // Make sure the collection of dashes is big enough
+    while (lotsOfDashes.length() < len) {
+      lotsOfDashes = lotsOfDashes.concat(lotsOfDashes);
+    } // while
+    // Extract an appropriate length substring
+    return lotsOfDashes.substring(0, len);
+  } // dashes(int)
+
+  /**
+   * Print a TextBlock to the specified destination.
+   */
+  public static void print(PrintWriter pen, TextBlock block) {
+    for (int i = 0; i < block.height(); i++) {
+      // Even though we only call block.row with a valid i,
+      // we need to put the call in a try/catch block.
+      try {
+        pen.println(block.row(i));
+      } catch (Exception e) {
+        pen.println();
+      } // catch (Exception)
+    } // for
+  } // print(PrintWriter, TextBlock)
+
+  /**
+   * Build a sequence of spaces of a specified length.
+   */
+  static String spaces(int len) {
+    // As with dashes, this is probably overkill.
+    // Make sure the collection of dashes is big enough
+    while (lotsOfSpaces.length() < len) {
+      lotsOfSpaces = lotsOfSpaces.concat(lotsOfSpaces);
+    } // while
+    // Extract an appropriate length substring
+    return lotsOfSpaces.substring(0, len);
+  } // spaces(int)
+
+  public static boolean eqv(TextBlock t1, TextBlock t2) {
+    // Use and operand to test both t1 & t2
+    return t1.getClass() == t2.getClass() && equal(t1, t2);
+}
+
+  public static boolean equal(TextBlock t1, TextBlock t2) {
+    // check for height and width of t1 & t2
+    if (t1.height() != t2.height() || t1.width() != t2.width()) {
+      return false;
+    }
+
+    for (int i = 0; i < t1.height(); i++) { // loop through height
+      try {
+        if (!t1.row(i).equals(t2.row(i))) { // loop through each row
+          return false;
+        }
+      } catch (Exception e) {
+        e.getStackTrace();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public static boolean eq(TextBlock t1, TextBlock t2) { 
+    return t1 == t2; // use the == operand to return a boolean
+}
+
+public static void print(PrintStream out, TextBlock boxedBlock) {
+}
 
 
-    box.row(1);
-    box2.row(0);
-    box3.row(1);
-    // Print out the block
-    TBUtils.print(pen, block);
-    TBUtils.print(pen, box);
-    TBUtils.print(pen, box2);
-    TBUtils.print(pen, box3); 
-
-    VComposition Vbox = new VComposition(block, block2);
-    BoxedBlock Vbox1 = new BoxedBlock(Vbox);
-    Vbox.row(1);
-    TBUtils.print(pen, Vbox1);
-    pen.println("---");
-
-
-    
-
-
-    VComposition HelloGoodbye = new VComposition(box, box3);
-    TBUtils.print(pen, HelloGoodbye);
-
-    HComposition right = new HComposition(box, block2);
-    TBUtils.print(pen, right);
-
-    HComposition left = new HComposition(block2, box);
-    TBUtils.print(pen, left);
-
-    TextBlock truncatedBlock = new Truncated(truncatedBox, 5); 
-    TBUtils.print(pen, truncatedBlock);
-
-    TextBlock centeredBlock = new Centered(centeredBox, 20);
-    TBUtils.print(pen, centeredBlock);
-
-    TextBlock rightJustifiedBlock = new RightJustified(justifiedBox, 20);
-    TBUtils.print(pen, rightJustifiedBlock);
-
-    TextBlock HorizontallyFlippledBlock = new HorizontallyFlipped(HFlipBox);
-    TBUtils.print(pen, HorizontallyFlippledBlock);
-    // Clean up after ourselves.
-    pen.close();
-  } // main(String[])
-
-} // class TBExpt
+} // class TBUtils
