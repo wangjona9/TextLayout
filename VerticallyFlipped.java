@@ -1,88 +1,31 @@
 /**
- * The vertical composition of two text blocks.
- * 
- * @author Samuel A. Rebelsky
- * @version 1.2 of February 2019
+ * An implementation to vertically flip
+ * an input block's contents.
+ * @author Jonathan Wang
+ * September 2023
  */
-public class VComposition implements TextBlock {
-  // +--------+------------------------------------------------------------
-  // | Fields |
-  // +--------+
+public class VerticallyFlipped implements TextBlock {
+    private TextBlock contents;
 
-  /**
-   * The top portion of the composition.
-   */
-  TextBlock top;
+    public VerticallyFlipped(TextBlock unjBox) {
+        this.contents = unjBox;
+    }
 
-  /**
-   * The bottom portion of the composition.
-   */
-  TextBlock bottom;
+    public String row(int i) throws Exception {
+        return this.contents.row(this.contents.height() - i - 1); // Change the positioning of each row
+    }
 
-  // +--------------+------------------------------------------------------
-  // | Constructors |
-  // +--------------+
+    /**
+     * Determine how many rows are in the block.
+     */
+    public int height() {
+        return contents.height();
+    } // height()
 
-  /**
-   * Build a new block by composing top and bottom vertically.
-   */
-  public VComposition(TextBlock top, TextBlock bottom) {
-    this.top = top;
-    this.bottom = bottom;
-  } // VComposition(String)
-
-  // +---------+-----------------------------------------------------------
-  // | Methods |
-  // +---------+
-
-  /**
-   * Get one row from the block.
-   * 
-   * @pre 0 <= i < this.height()
-   * @exception Exception if the precondition is not met
-   */
-  public String row(int i) throws Exception {
-    // Gather some basic information
-    int th = this.top.height();
-    int bh = this.bottom.height();
-    int tw = this.top.width();
-    int bw = this.bottom.width();
-    int h = th + bh;
-
-    // Determine padding
-    String padtop = "";
-    String padbot = "";
-    if (tw > bw) {
-      padbot = TBUtils.spaces(tw - bw);
-    } else {
-      padtop = TBUtils.spaces(bw - tw);
-    } // the bottom is wider
-
-    if ((i < 0) || (i >= h)) {
-      throw new Exception("Invalid row " + i);
-    } else if (i < th) {
-      return this.top.row(i) + padtop;
-    } else {
-      return this.bottom.row(i - th) + padbot;
-    } // if the row is in the bottom half
-  } // row(int)
-
-  /**
-   * Determine how many rows are in the block.
-   */
-  public int height() {
-    // The height is the sum of the heights of the top and bottom
-    // blocks.
-    return this.top.height() + this.bottom.height();
-  } // height()
-
-  /**
-   * Determine how many columns are in the block.
-   */
-  public int width() {
-    // The width is the greater of the widths of the top and bottom
-    // blocks.
-    return Math.max(this.top.width(), this.bottom.width());
-  } // width()
-
-} // class VComposition
+    /**
+     * Determine how many columns are in the block.
+     */
+    public int width() {
+        return contents.width();
+    } // width()
+}
