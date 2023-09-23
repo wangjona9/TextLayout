@@ -50,10 +50,8 @@ public class RightJustified implements TextBlock {
           unjRow = unjRow.substring(0, maxWidth);
       }
 
-      int padding = maxWidth - unjRow.length();
-
       // Add space to the left of the TextLine
-      String rightJustified = String.format("%" + (padding + unjRow.length()) + "s", unjRow); 
+      String rightJustified = String.format("%" + maxWidth + "s", unjRow);
 
       return rightJustified;
   }
