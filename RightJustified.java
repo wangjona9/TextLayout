@@ -1,5 +1,11 @@
+/**
+ * An implementation to right-justify an input block
+ * within a specified width, truncating if necessary.
+ * 
+ * author Jonathan Wang
+ * September 2023
+ */
 public class RightJustified implements TextBlock {
-
   // +--------+------------------------------------------------------------
   // | Fields |
   // +--------+
@@ -7,24 +13,24 @@ public class RightJustified implements TextBlock {
   /**
    * The original text block.
    */
-   TextBlock contents;
+  private TextBlock contents;
 
   /**
    * The maximum width for truncation.
    */
-   int maxWidth;
+  private int maxWidth;
 
   // +--------------+------------------------------------------------------
   // | Constructors |
   // +--------------+
 
   /**
-   * Build a new truncated block.
+   * Build a new right-justified block.
    */
-  public RightJustified(TextBlock contents, int maxWidth) {
-    this.contents = contents;
-    this.maxWidth = maxWidth;
-  } 
+  public RightJustified(TextBlock contents, int width) {
+      this.contents = contents;
+      this.maxWidth = width;
+  }
 
   // +---------+-----------------------------------------------------------
   // | Methods |
@@ -37,30 +43,32 @@ public class RightJustified implements TextBlock {
    * @exception Exception if the precondition is not met
    */
   public String row(int i) throws Exception {
-    String originalRow;
-    try {
-        originalRow = contents.row(i);
-    } catch (Exception e) {
-        throw new Exception("Invalid row " + i);
-    }
+      String unjRow = contents.row(i);
 
-    int padding = (maxWidth - originalRow.length());
+      // Truncate content if it's smaller than maxWidth
+      if (unjRow.length() > maxWidth) {
+          unjRow = unjRow.substring(0, maxWidth);
+      }
 
-    String rightJustified = String.format("%" + (padding + originalRow.length()) + "s", originalRow);
-    return rightJustified;
-}
+      int padding = maxWidth - unjRow.length();
+
+      // Add space to the left of the TextLine
+      String rightJustified = String.format("%" + (padding + unjRow.length()) + "s", unjRow); 
+
+      return rightJustified;
+  }
 
   /**
    * Determine how many rows are in the block.
    */
   public int height() {
-    return contents.height();
+      return contents.height();
   } // height()
 
   /**
    * Determine how many columns are in the block.
    */
   public int width() {
-    return maxWidth;
+      return maxWidth;
   } // width()
 }
