@@ -1,9 +1,9 @@
 /**
  * An implementation to center an input block
- * within a specified width.
+ * within a specified width, truncating if necessary.
  * 
- * @author Jonathan Wang
- *         September 2023
+ * author Jonathan Wang
+ * September 2023
  */
 public class Centered implements TextBlock {
     // +--------+------------------------------------------------------------
@@ -44,6 +44,11 @@ public class Centered implements TextBlock {
      */
     public String row(int i) throws Exception {
         String unjRow = contents.row(i);
+
+        // Truncate content if it's smaller than maxWidth
+        if (unjRow.length() > maxWidth) {
+            unjRow = unjRow.substring(0, maxWidth);
+        }
 
         int padding = (maxWidth - unjRow.length()) / 2;
 
