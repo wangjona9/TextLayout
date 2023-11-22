@@ -86,6 +86,7 @@ class TextBlockTests {
     assertEquals("|Hello|", verticallyFlippedBlock.row(2));
   }
 
+  // HorizontalSeparator tests
   @Test
   void testHorizontalSeparator() throws Exception {
     char separatorChar = '-';
@@ -147,5 +148,64 @@ class TextBlockTests {
   void testDashes() {
     assertEquals("--", TBUtils.dashes(2));
     assertEquals("------", TBUtils.dashes(6));
+  }
+
+  // Test creating a TextLine with an empty string
+  @Test
+  void testTextLineWithEmptyString() throws Exception {
+      TextBlock emptyTextLine = new TextLine("");
+      assertEquals("", emptyTextLine.row(0));
+      assertEquals(1, emptyTextLine.height());
+      assertEquals(0, emptyTextLine.width());
+  }
+
+  // Test creating a Truncated block with an empty content block
+  @Test
+  void testTruncatedWithEmptyContent() throws Exception {
+      TextBlock emptyContentBlock = new TextLine("");
+      Truncated truncatedBlock = new Truncated(emptyContentBlock, 5);
+      assertEquals("", truncatedBlock.row(0));
+  }
+
+  // Test creating an empty VComposition
+  @Test
+  void testEmptyVComposition() throws Exception {
+      TextBlock empty1 = new TextLine("");
+      TextBlock empty2 = new TextLine("");
+      VComposition emptyVComposition = new VComposition(empty1, empty2);
+      assertEquals(2, emptyVComposition.height());
+      assertEquals(0, emptyVComposition.width());
+  }
+
+  // Test behavior when truncating, centering, or right-justifying an empty block
+  @Test
+  void testOperationsOnEmptyBlock() throws Exception {
+      TextBlock emptyBlock = new TextLine("");
+
+      // Truncated
+      Truncated truncatedEmptyBlock = new Truncated(emptyBlock, 5);
+      assertEquals("", truncatedEmptyBlock.row(0));
+
+      // Centered
+      Centered centeredEmptyBlock = new Centered(emptyBlock, 10);
+      assertEquals("          ", centeredEmptyBlock.row(0));
+
+      // RightJustified
+      RightJustified rightJustifiedEmptyBlock = new RightJustified(emptyBlock, 8);
+      assertEquals("        ", rightJustifiedEmptyBlock.row(0));
+  }
+
+  // Test the behavior of flipping operations on an empty block
+  @Test
+  void testFlippingOperationsOnEmptyBlock() throws Exception {
+      TextBlock emptyBlock = new TextLine("");
+
+      // HorizontallyFlipped
+      HorizontallyFlipped horizontallyFlippedEmptyBlock = new HorizontallyFlipped(emptyBlock);
+      assertEquals("", horizontallyFlippedEmptyBlock.row(0));
+
+      // VerticallyFlipped
+      VerticallyFlipped verticallyFlippedEmptyBlock = new VerticallyFlipped(emptyBlock);
+      assertEquals("", verticallyFlippedEmptyBlock.row(0));
   }
 }
