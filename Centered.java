@@ -2,7 +2,7 @@
  * An implementation to center an input block
  * within a specified width, truncating if necessary.
  * 
- * author Jonathan Wang
+ * @author Jonathan Wang
  * September 2023
  */
 public class Centered implements TextBlock {
