@@ -6,9 +6,7 @@
  * September 2023
  */
 public class RightJustified implements TextBlock {
-  // +--------+------------------------------------------------------------
-  // | Fields |
-  // +--------+
+  // Fields
 
   /**
    * The original text block.
@@ -20,21 +18,17 @@ public class RightJustified implements TextBlock {
    */
   private int maxWidth;
 
-  // +--------------+------------------------------------------------------
-  // | Constructors |
-  // +--------------+
+  // Constructors
 
   /**
    * Build a new right-justified block.
    */
   public RightJustified(TextBlock contents, int width) {
-      this.contents = contents;
-      this.maxWidth = width;
+    this.contents = contents;
+    this.maxWidth = width;
   }
 
-  // +---------+-----------------------------------------------------------
-  // | Methods |
-  // +---------+
+  // Methods
 
   /**
    * Get one row from the block.
@@ -43,30 +37,30 @@ public class RightJustified implements TextBlock {
    * @exception Exception if the precondition is not met
    */
   public String row(int i) throws Exception {
-      String unjRow = contents.row(i);
+    String unjRow = contents.row(i);
 
-      // Truncate content if it's smaller than maxWidth
-      if (unjRow.length() > maxWidth) {
-          unjRow = unjRow.substring(0, maxWidth);
-      }
+    // Truncate content if it's smaller than maxWidth
+    if (unjRow.length() > maxWidth) {
+      unjRow = unjRow.substring(0, maxWidth);
+    }
 
-      // Add space to the left of the TextLine
-      String rightJustified = String.format("%" + maxWidth + "s", unjRow);
+    // Add space to the left of the TextLine
+    String rightJustified = String.format("%" + maxWidth + "s", unjRow);
 
-      return rightJustified;
+    return rightJustified;
   }
 
   /**
    * Determine how many rows are in the block.
    */
   public int height() {
-      return contents.height();
+    return contents.height();
   } // height()
 
   /**
    * Determine how many columns are in the block.
    */
   public int width() {
-      return maxWidth;
+    return maxWidth;
   } // width()
 }
