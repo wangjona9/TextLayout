@@ -2,7 +2,7 @@
  * An implementation to right-justify an input block
  * within a specified width, truncating if necessary.
  * 
- * author Jonathan Wang
+ * @author Jonathan Wang
  * September 2023
  */
 public class RightJustified implements TextBlock {
