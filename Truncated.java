@@ -1,49 +1,63 @@
 /**
- * An implementation to truncate an input block
- * within a specified width.
- * @author Jonathan Wang
+ * An implementation to truncate an input block within a specified width.
+ * 
+ * @author: Jonathan Wang
  * September 2023
  */
 public class Truncated implements TextBlock {
-    private TextBlock contents;
-    private int maxWidth;
-  
-    public Truncated(TextBlock contents, int maxWidth) {
-      this.contents = contents;
-      this.maxWidth = maxWidth;
-    }
-  
-    // Methods (required by TextBlock interface)
-    public String row(int i) throws Exception {
-      if (contents.width() == 0) { // If width is 0
-        return "";
-      }
+  private TextBlock contents;
+  private int maxWidth;
 
-      String originalRow = contents.row(i);
-  
-      int padding = (maxWidth - originalRow.length()); // Set space between the TextLine and the rest of the width
-      String leftJustified = String.format("%" + (originalRow.length()) + "s", originalRow); // Format right side of the Textline
-      leftJustified = String.format("%-" + (padding + leftJustified.length()) + "s", leftJustified); // Format left side of the Textline
-  
-      // Truncate text if the TextLine length is less than the overall width
-      if (originalRow.length() > maxWidth) {
-        return originalRow.substring(0, maxWidth); // Truncate string
-      } else {
-        return leftJustified; // Return whitespace to the right of the textline
-      }
+  /**
+   * Constructs a Truncated object with the given contents and maxWidth.
+   *
+   * @param contents The TextBlock to be truncated.
+   * @param maxWidth The maximum width for truncation.
+   */
+  public Truncated(TextBlock contents, int maxWidth) {
+    this.contents = contents;
+    this.maxWidth = maxWidth;
+  }
+
+  /**
+   * Get the truncated row at the specified index.
+   *
+   * @param i The index of the row.
+   * @return The truncated row.
+   * @throws Exception
+   */
+  public String row(int i) throws Exception {
+    if (contents.width() == 0) {
+      return "";
     }
-  
-    /**
-     * Determine how many rows are in the block.
-     */
-    public int height() {
-      return contents.height();
-    } // height()
-  
-    /**
-     * Determine how many columns are in the block.
-     */
-    public int width() {
-      return maxWidth;
-    } // width()
-  }  
+
+    String originalRow = contents.row(i);
+
+    int padding = maxWidth - originalRow.length();
+    String paddedRow = String.format("%-" + (padding + originalRow.length()) + "s", originalRow);
+
+    if (originalRow.length() > maxWidth) {
+      return originalRow.substring(0, maxWidth); // Truncate string
+    } else {
+      return paddedRow; // Return padded row
+    }
+  }
+
+  /**
+   * Determine how many rows are in the block.
+   *
+   * @return The number of rows.
+   */
+  public int height() {
+    return contents.height();
+  }
+
+  /**
+   * Determine how many columns are in the block.
+   *
+   * @return The maximum width.
+   */
+  public int width() {
+    return maxWidth;
+  }
+}
